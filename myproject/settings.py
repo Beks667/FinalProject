@@ -44,7 +44,18 @@ INSTALLED_APPS = [
     'accounts',
     'serials',
     'comments',
+    'likes',
+    'rest_auth',
+    'rest_auth.registration',
+    'allauth',
+    'allauth.account',
+    'django.contrib.sites',
+    
+
+    
+
 ]
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -147,7 +158,19 @@ REST_FRAMEWORK = {
  ]
 }
 
-
+SWAGGER_SETTINGS = {
+    'PERSIT_AUTH': True,
+    'SECURITY_DEFINITIONS':{
+        'Basic':{
+            'type': 'basic'
+        },
+        'Token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
+}
 AUTH_USER_MODEL = 'accounts.User'
 
 
