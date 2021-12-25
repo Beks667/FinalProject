@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from accounts.serializers import RegistrationSerializer,LoginSerializer,UserSerializer
 from django.contrib.auth import get_user_model
+from rest_framework.decorators import action
 
 from rest_framework.authtoken.models import Token
 from drf_yasg.utils import swagger_auto_schema
@@ -12,6 +13,7 @@ from django.contrib.auth import authenticate
 User=get_user_model()
 
 class RegistrationAPIView(APIView):
+
 
     @swagger_auto_schema(operations_description='Upload thumbnail',
                         request_body=RegistrationSerializer, )
@@ -31,8 +33,13 @@ class RegistrationAPIView(APIView):
         return Response({'token':token.key})
 
 class LoginAPIView(APIView):
+    serializer_class = RegistrationSerializer
+    @swagger_auto_schema(operation_description='User registration',request_body=RegistrationSerializer,
+                            methods=['post',],
+                            responses={200:'user registrated successfully',400:'bad request'})
+    @action(detail=True,methods=['post',],serializer_class=RegistrationSerializer)
     
-    def get(self, request):
+    def post(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         username =serializer.validated_data.get('username')
@@ -47,6 +54,11 @@ class LoginAPIView(APIView):
 
 class LogoutAPIView(APIView):
     permission_classes=[IsAuthenticated, ]
+    serializer_class = RegistrationSerializer
+    @swagger_auto_schema(operation_description='User registration',request_body=RegistrationSerializer,
+                            methods=['post',],
+                            responses={200:'user registrated successfully',400:'bad request'})
+    @action(detail=True,methods=['post',],serializer_class=RegistrationSerializer)
 
     def post(self, request):
         user = request.user

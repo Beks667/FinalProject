@@ -9,9 +9,15 @@ class ImageSerilizer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    likes = serializers.SerializerMethodField()
+
     class Meta:
         model = Product
-        fields= ['id','title','description','category','amount','rating','country','year','created_at','slug']
+        fields= ['id','title','description','category','amount','rating','country','year','created_at','slug','likes']
+
+    def get_likes(self, instance):
+        return instance.posts_like.all().count()
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
